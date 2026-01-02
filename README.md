@@ -14,9 +14,9 @@ A modern, full-stack boilerplate for building applications with **Nuxt 4** and *
 - **Nuxt UI v4** - Easy to use UI components powered by Reka UI and Tailwind via [`@nuxt/ui`](https://github.com/nuxt/ui)
 - **Authentication** - Email/Password auth via [`nuxt-auth-utils`](https://github.com/atinux/nuxt-auth-utils)
 - **TypeScript** - Full type safety across the stack
-- **Pinia** - State management for Vue 3 via [Pinia](https://github.com/vuejs/pinia/tree/v2/packages/nuxt)
+- **Pinia** - State management for Vue 3 via [`@pinia/nuxt`](https://pinia.vuejs.org/ssr/nuxt.html)
 
-An AGENTS.md file is also included with detailed project context, architecture, and coding conventions. A Claude Skills folder is also with a frotend-design skill.
+An AGENTS.md file is also included with detailed project context, architecture, and coding conventions. A Claude Skills folder is also with Antrophic's frontend-design skill.
 
 ## 🚀 Quick Start
 
@@ -72,20 +72,21 @@ cp .env.example .env
 # Apply migrations to local development (local D1)
 pnpm migrations:dev
 
-# Apply migrations to preview database
+# Apply migrations to preview database (remote D1)
 pnpm migrations:preview
 
-# Apply migrations to production database
+# Apply migrations to production database (remote D1)
 pnpm migrations:production
 ```
 
 ### 5. Start Development
+I usually use remote bindings during development to connect to real Cloudflare resources. If you want to do so, change the `dev` script in `package.json` to include the `--remote` flag. In `wrangler.jsonc`, make sure the `remote` property is set to `true` for the bindings you want to use remotely. You can choose to point your development to the preview bindings for example.
 
 ```bash
 pnpm dev
 ```
 
-The app will start at `http://localhost:3000` with local Cloudflare bindings. Add `--remote` flag to connect to remote resources.
+The app will start at `http://localhost:3000` with local Cloudflare bindings.
 
 ## 📁 Project Structure
 
@@ -228,6 +229,7 @@ pnpm deploy:production
 - [Workers AI Documentation](https://developers.cloudflare.com/workers-ai/)
 - [Drizzle ORM Documentation](https://orm.drizzle.team/)
 - [Nuxt UI Documentation](https://ui.nuxt.com/)
+- [Pinia Documentation](https://pinia.vuejs.org/core-concepts/)
 
 ## 📄 License
 
