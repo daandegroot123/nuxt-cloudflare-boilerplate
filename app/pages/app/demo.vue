@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import { useCounterStore } from '~/stores/counter'
+
+// Pinia store demo
+const counter = useCounterStore()
+
 // Database demo
 const { data: usersData, status: usersStatus, refresh: refreshUsers } = await useFetch('/api/demo/users')
 
@@ -88,6 +93,38 @@ async function generateAI() {
           <p v-else class="text-gray-500 dark:text-gray-400 text-sm">
             No users yet. Sign up to create your first user!
           </p>
+        </div>
+      </UCard>
+
+      <!-- Pinia Store Demo -->
+      <UCard class="mb-6">
+        <template #header>
+          <div class="flex items-center gap-2">
+            <UIcon name="i-lucide-layers" class="w-5 h-5 text-primary" />
+            <h2 class="font-semibold">Pinia Store</h2>
+          </div>
+        </template>
+
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+          This demonstrates state management using Pinia. The state persists across page navigations.
+        </p>
+
+        <div class="flex items-center gap-4">
+          <div class="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg min-w-25">
+            <p class="text-xs text-gray-500 uppercase font-bold">Count</p>
+            <p class="text-2xl font-mono">{{ counter.count }}</p>
+          </div>
+          <div class="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg min-w-25">
+            <p class="text-xs text-gray-500 uppercase font-bold">Double</p>
+            <p class="text-2xl font-mono">{{ counter.doubleCount }}</p>
+          </div>
+          <UButton
+            icon="i-lucide-plus"
+            size="xl"
+            @click="counter.increment"
+          >
+            Increment
+          </UButton>
         </div>
       </UCard>
 
