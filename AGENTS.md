@@ -27,6 +27,7 @@ This is a **Nuxt 4** application deployed on **Cloudflare Workers**. It uses a f
 - **Deployment**: `pnpm deploy:preview` or `pnpm deploy:production`.
 
 ## Coding Conventions
+You have skills saved in `.claude/skills/` that guide how to write frontend code, backend code, styling, and more. Follow these skills closely to ensure consistency and quality.
 
 ### Vue / Nuxt
 - Use **Vue 3 Composition API** with `<script setup lang="ts">`.
