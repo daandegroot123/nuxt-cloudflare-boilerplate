@@ -1,0 +1,16 @@
+{
+  "servers": {
+    "nuxt-ui": {
+      "type": "http",
+      "url": "https://ui.nuxt.com/mcp"
+    },
+    "cloudflare": {
+      "type": "http",
+      "url": "https://docs.mcp.cloudflare.com/mcp"
+    },
+    "nuxt": {
+      "type": "http",
+      "url": "https://nuxt.com/mcp"
+    }
+  }
+}

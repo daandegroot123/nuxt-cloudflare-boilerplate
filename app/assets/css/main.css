@@ -1,0 +1,33 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+@theme static {
+  --fonts-sans: 'Inter', sans-serif;
+  --fonts-mono: 'Fira Code', monospace;
+}
+
+:root {
+  --ui-bg: white;
+  --ui-bg-elevated: var(--ui-color-neutral-50);
+  --ui-bg-accented: var(--ui-color-neutral-100);
+}
+
+.dark {
+  --ui-bg: var(--ui-color-neutral-950);
+  --ui-bg-elevated: var(--ui-color-neutral-900);
+  --ui-bg-accented: var(--ui-color-neutral-800);
+}
+
+body {
+  background-color: var(--ui-bg);
+  background-image: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(20, 184, 166, 0.15), rgba(255, 255, 255, 0));
+  min-height: 100vh;
+}
+
+.chat-content > p > a[href^="#source-"] {
+  @apply text-primary-500 dark:text-primary-400 text-xs font-medium cursor-help align-super ml-0.5 hover:underline no-underline;
+}
+
+.chat-content > p {
+  margin-bottom: 5px;
+}

@@ -1,0 +1,140 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "compatibility_date": "2025-01-15",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "main": ".output/server/index.mjs",
+  "name": "nuxt-cloudflare-boilerplate",
+
+  "vars": {
+    "ENVIRONMENT": "development"
+  },
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "local-db",
+      "database_id": "local-db-id",
+      "migrations_dir": "./server/database/migrations"
+    }
+  ],
+
+  "ai": {
+    "binding": "AI",
+    "remote": true // AI binding in dev mode requires remote access
+  },
+
+  // "vectorize": [
+  //   {
+  //     "binding": "VECTORIZE",
+  //     "index_name": "your-index-name-preview",
+  //     "remote": true // Vectorize binding in dev mode requires remote access
+  //   }
+  // ],
+
+  "r2_buckets": [
+    {
+      "binding": "R2",
+      "bucket_name": "local-bucket"
+    }
+  ],
+
+  "env": {
+    "preview": {
+      "name": "nuxt-cloudflare-boilerplate-preview",
+      "preview_urls": false,
+      "vars": {
+        "ENVIRONMENT": "preview"
+      },
+      "compatibility_date": "2025-01-15",
+      "compatibility_flags": [
+        "nodejs_compat"
+      ],
+
+      // D1 Database binding
+      // Create with: wrangler d1 create your-db-name
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "your-db-name-preview",
+          "database_id": "your-preview-database-id",
+          "migrations_dir": "./server/database/migrations"
+        }
+      ],
+
+      // Workers AI binding
+      "ai": {
+        "binding": "AI"
+      },
+
+      // Vectorize index binding
+      // Create with: wrangler vectorize create your-index --dimensions=1536 --metric=cosine
+      "vectorize": [
+        {
+          "binding": "VECTORIZE",
+          "index_name": "your-index-name-preview"
+        }
+      ],
+
+      // R2 bucket binding (optional)
+      // Create with: wrangler r2 bucket create your-bucket-name
+      "r2_buckets": [
+        {
+          "binding": "R2",
+          "bucket_name": "your-bucket-name-preview"
+        }
+      ]
+    },
+    "production": {
+      "name": "nuxt-cloudflare-boilerplate",
+      "preview_urls": false,
+      "vars": {
+        "ENVIRONMENT": "production"
+      },
+      "compatibility_date": "2025-01-15",
+      "compatibility_flags": [
+        "nodejs_compat"
+      ],
+
+      // D1 Database binding
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "your-db-name-production",
+          "database_id": "your-production-database-id",
+          "migrations_dir": "./server/database/migrations"
+        }
+      ],
+
+      // Workers AI binding
+      "ai": {
+        "binding": "AI"
+      },
+
+      // Vectorize index binding
+      "vectorize": [
+        {
+          "binding": "VECTORIZE",
+          "index_name": "your-index-name-production"
+        }
+      ],
+
+      // R2 bucket binding (optional)
+      "r2_buckets": [
+        {
+          "binding": "R2",
+          "bucket_name": "your-bucket-name-production"
+        }
+      ]
+    }
+  },
+  "observability": {
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "invocation_logs": true,
+      "persist": true
+    }
+  }
+}

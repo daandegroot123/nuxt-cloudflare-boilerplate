@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "Vue.volar",
+    "dbaeumer.vscode-eslint",
+    "bradlc.vscode-tailwindcss",
+    "antfu.iconify",
+    "esbenp.prettier-vscode",
+    "mikestead.dotenv",
+    "ms-azuretools.vscode-docker"
+  ]
+}
