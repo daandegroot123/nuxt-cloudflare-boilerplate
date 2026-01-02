@@ -1,33 +1,36 @@
-# Nuxt + Cloudflare Boilerplate
+# Nuxt 4 + Cloudflare Boilerplate
 
-A modern, full-stack boilerplate for building applications with **Nuxt 4** and **Cloudflare**. Deploy to the edge in minutes with D1 (database), Workers AI, Vectorize (vector search), and R2 (storage).
+A modern, full-stack boilerplate for building applications with **Nuxt 4** and **Cloudflare**. My own projects are usually build using the combination of these two, so I figured it would be smart to create an easy-to-use boilerplate for future projects!
 
 ## ✨ Features
 
-- **Nuxt 4** - Latest Vue 3 framework with file-based routing
+- **Nuxt 4** - Latest Vue 3 framework with file-based routing and Nitro 3
 - **Cloudflare Workers** - Edge-first deployment
-- **D1 Database** - SQLite at the edge with Drizzle ORM
-- **Workers AI** - Run AI models directly on Cloudflare
-- **Vectorize** - Vector database for semantic search
-- **R2 Storage** - S3-compatible object storage (optional)
-- **Nuxt UI v4** - Beautiful, accessible components
-- **Tailwind CSS v4** - Utility-first styling
-- **Authentication** - OAuth via nuxt-auth-utils (GitHub included)
-- **TypeScript** - Full type safety
+  - **D1 Database** - SQLite at the edge with Drizzle ORM
+  - **Workers AI** - Run AI models directly on Cloudflare Workers
+  - **Vectorize** - Vector database for semantic search
+  - **R2 Storage** - S3-compatible object storage
+  - *Or any other Cloudflare Workers bindings...*
+- **Nuxt UI v4** - Easy to use UI components powered by Reka UI and Tailwind via [`@nuxt/ui`](https://github.com/nuxt/ui)
+- **Authentication** - Email/Password auth via [`nuxt-auth-utils`](https://github.com/atinux/nuxt-auth-utils)
+- **TypeScript** - Full type safety across the stack
+- **Pinia** - State management for Vue 3 via [Pinia](https://github.com/vuejs/pinia/tree/v2/packages/nuxt)
+
+An AGENTS.md file is also included with detailed project context, architecture, and coding conventions. A Claude Skills folder is also with a frotend-design skill.
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
 - [Node.js](https://nodejs.org/) 20+
-- [pnpm](https://pnpm.io/) (recommended)
+- [pnpm](https://pnpm.io/) 10+
 - [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/) (`pnpm add -g wrangler`)
 - A [Cloudflare account](https://dash.cloudflare.com/sign-up)
 
 ### 1. Clone & Install
 
 ```bash
-git clone https://github.com/your-username/nuxt-cloudflare-boilerplate.git
+git clone https://github.com/daandegroot123/nuxt-cloudflare-boilerplate.git
 cd nuxt-cloudflare-boilerplate
 pnpm install
 ```
@@ -66,6 +69,9 @@ cp .env.example .env
 ### 4. Run Migrations
 
 ```bash
+# Apply migrations to local development (local D1)
+pnpm migrations:dev
+
 # Apply migrations to preview database
 pnpm migrations:preview
 
@@ -79,24 +85,24 @@ pnpm migrations:production
 pnpm dev
 ```
 
-The app will start at `http://localhost:3000` with remote Cloudflare bindings.
+The app will start at `http://localhost:3000` with local Cloudflare bindings. Add `--remote` flag to connect to remote resources.
 
 ## 📁 Project Structure
 
 ```
 ├── app/
-│   ├── components/       # Vue components
+│   ├── components/       # Reusable UI components
 │   ├── layouts/          # Layout templates
 │   ├── middleware/       # Route middleware (auth)
-│   ├── pages/            # File-based routing
-│   └── assets/css/       # Tailwind CSS
+│   ├── pages/            # File-based routing (Nuxt 4 structure)
+│   └── assets/css/       # Tailwind CSS v4 configuration
 ├── server/
-│   ├── api/              # API routes
+│   ├── api/              # API routes (Nitro)
 │   ├── database/
 │   │   ├── schema.ts     # Drizzle ORM schema
 │   │   └── migrations/   # SQL migrations
 │   ├── middleware/       # Server middleware
-│   └── utils/            # Server utilities (Drizzle, AI)
+│   └── utils/            # Server utilities (Drizzle, AI, R2)
 ├── shared/
 │   └── types/            # Shared TypeScript types
 ├── wrangler.jsonc        # Cloudflare configuration
@@ -109,7 +115,7 @@ This boilerplate includes email/password authentication out of the box using `nu
 
 ### How It Works
 
-- **Register**: `POST /api/auth/register` with `email`, `password`, and optional `name`
+- **Register**: `POST /api/auth/register` with `email`, `password`, and `name`
 - **Login**: `POST /api/auth/login` with `email` and `password`
 - **Logout**: `POST /api/auth/logout`
 - **Session**: Use `useUserSession()` composable in your Vue components
@@ -122,35 +128,15 @@ Make sure to set a session secret in your `.env`:
 NUXT_SESSION_PASSWORD=your-session-secret-at-least-32-characters
 ```
 
-Generate a secure secret with:
-```bash
-openssl rand -base64 32
-```
-
 ### Protected Routes
 
-Routes under `/app/*` are protected by the global auth middleware. Unauthenticated users are redirected to `/login`.
-
-### Adding OAuth Providers (Optional)
-
-See [nuxt-auth-utils documentation](https://github.com/atinux/nuxt-auth-utils) for adding GitHub, Google, and other OAuth providers.
+Routes under `/app/*` are protected by the global auth middleware in `app/middleware/auth.global.ts`. Unauthenticated users are redirected to `/login`.
 
 ## 🗄️ Database
 
 ### Schema
 
-Define your tables in `server/database/schema.ts` using Drizzle ORM:
-
-```typescript
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
-
-export const posts = sqliteTable('posts', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  title: text('title').notNull(),
-  content: text('content'),
-  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
-})
-```
+Define your tables in `server/database/schema.ts` using Drizzle ORM.
 
 ### Migrations
 
@@ -158,7 +144,8 @@ export const posts = sqliteTable('posts', {
 2. Run migrations:
 
 ```bash
-pnpm migrations:preview   # Preview environment
+pnpm migrations:dev        # Local development
+pnpm migrations:preview    # Preview environment
 pnpm migrations:production # Production environment
 ```
 
@@ -169,18 +156,18 @@ pnpm migrations:production # Production environment
 export default defineEventHandler(async (event) => {
   const db = useDrizzle(event)
   
-  const posts = await db.select().from(tables.posts).all()
-  return posts
+  const users = await db.select().from(tables.users).all()
+  return users
 })
 ```
 
 ## 🤖 Workers AI
 
-Use AI models directly in your API routes:
+Use AI models directly in your API routes via the `useAI(event)` utility:
 
 ```typescript
 export default defineEventHandler(async (event) => {
-  const ai = event.context.cloudflare.env.AI
+  const ai = useAI(event)
 
   const result = await ai.run('@cf/meta/llama-3.1-8b-instruct', {
     prompt: 'Hello, world!',
@@ -190,31 +177,22 @@ export default defineEventHandler(async (event) => {
 })
 ```
 
-See [Workers AI documentation](https://developers.cloudflare.com/workers-ai/) for available models.
+## 🔍 Vectorize & R2
 
-## 🔍 Vectorize
-
-For semantic search and RAG applications:
+Utilities for Vectorize and R2 are included in `server/utils/cloudflare.ts`:
 
 ```typescript
-export default defineEventHandler(async (event) => {
-  const { AI, VECTORIZE } = event.context.cloudflare.env
+// Vectorize
+const vectorize = useVectorize(event)
+const results = await vectorize.query(embedding, { topK: 10 })
 
-  // Generate embeddings
-  const embeddings = await AI.run('@cf/baai/bge-base-en-v1.5', {
-    text: 'Your search query',
-  })
-
-  // Query Vectorize
-  const results = await VECTORIZE.query(embeddings.data[0], {
-    topK: 10,
-  })
-
-  return results
-})
+// R2
+const r2 = useR2(event)
+await r2.put('file.txt', 'content')
 ```
 
 ## 📦 Deployment
+An example Github Actions workflow is included in `.github/example-workflows/cloudflare.yml` for deploying to Cloudflare Workers.
 
 ### Preview
 
@@ -234,8 +212,9 @@ pnpm deploy:production
 |--------|-------------|
 | `pnpm dev` | Start development server with remote bindings |
 | `pnpm build` | Build for production |
-| `pnpm deploy:preview` | Deploy to preview environment |
-| `pnpm deploy:production` | Deploy to production |
+| `pnpm deploy:preview` | Build and deploy to preview environment |
+| `pnpm deploy:production` | Build and deploy to production |
+| `pnpm migrations:dev` | Run migrations on development D1 |
 | `pnpm migrations:preview` | Run migrations on preview D1 |
 | `pnpm migrations:production` | Run migrations on production D1 |
 | `pnpm lint` | Run ESLint |
