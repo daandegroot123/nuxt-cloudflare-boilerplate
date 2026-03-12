@@ -26,6 +26,14 @@ declare module 'h3' {
 
         // R2 Bucket (optional)
         R2: R2Bucket
+
+        // Cloudflare bindings
+        NUXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY?: string
+        CLOUDFLARE_TURNSTILE_PRIVATE_KEY?: string
+
+        // Google bindings
+        NUXT_OAUTH_GOOGLE_CLIENT_ID?: string
+        NUXT_OAUTH_GOOGLE_CLIENT_SECRET?: string
       }
       context?: ExecutionContext
     }

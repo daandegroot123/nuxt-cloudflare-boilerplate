@@ -133,6 +133,19 @@ function toggleMode() {
           </UButton>
         </form>
 
+        <UButton
+          to="/auth/google"
+          external
+          icon="i-simple-icons-google"
+          color="neutral"
+          variant="subtle"
+          block
+          size="xl"
+          class="rounded-2xl mt-5"
+        >
+          Google
+        </UButton>
+
         <template #footer>
           <p class="text-center text-sm text-gray-500 dark:text-gray-400">
             {{ isLogin ? "Don't have an account?" : 'Already have an account?' }}
