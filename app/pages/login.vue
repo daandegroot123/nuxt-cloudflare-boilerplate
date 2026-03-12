@@ -16,6 +16,9 @@ const form = reactive({
   name: '',
 })
 
+const turnstileToken = ref('')
+const turnstileRef = ref()
+
 async function handleSubmit() {
   loading.value = true
   formError.value = null
@@ -27,6 +30,7 @@ async function handleSubmit() {
       body: {
         email: form.email,
         password: form.password,
+        turnstile: turnstileToken.value,
         ...(isLogin.value ? {} : { name: form.name }),
       },
     })
@@ -46,6 +50,7 @@ async function handleSubmit() {
 function toggleMode() {
   isLogin.value = !isLogin.value
   formError.value = null
+  turnstileRef.value?.reset()
 }
 </script>
 
@@ -112,6 +117,11 @@ function toggleMode() {
               <span class="text-xs">At least 8 characters</span>
             </template>
           </UFormField>
+
+          <Turnstile
+            ref="turnstileRef"
+            v-model="turnstileToken"
+          />
 
           <UButton
             type="submit"

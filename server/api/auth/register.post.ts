@@ -1,3 +1,5 @@
+import { validateTurnstile } from "~~/server/utils/cloudflare"
+
 /**
  * Register a new user with email and password
  */
@@ -11,6 +13,8 @@ export default defineEventHandler(async (event) => {
       message: 'Email and password are required',
     })
   }
+
+  await validateTurnstile(event, body.turnstile)
 
   const email = body.email.toLowerCase().trim()
   const password = body.password

@@ -100,3 +100,80 @@ export async function generateEmbeddings(event: H3Event, texts: string[]): Promi
   const result: any = await ai.run('@cf/baai/bge-base-en-v1.5', { text: texts })
   return result.data
 }
+
+/**
+ * Validate Cloudflare Turnstile token
+ *
+ * @example
+ * ```ts
+ * await validateTurnstile(event, body.turnstile)
+ * ```
+ */
+export async function validateTurnstile(event: H3Event, token?: string) {
+  if (!token) {
+    throw createError({
+      statusCode: 400,
+      message: 'Security verification is required',
+    })
+  }
+
+  const isLocalhost = process.env.NODE_ENV === 'development'
+  let secret = event.context.cloudflare?.env?.CLOUDFLARE_TURNSTILE_PRIVATE_KEY
+
+  // On localhost, we MUST use the dummy secret key because the frontend
+  // is hardcoded to use the dummy sitekey for development.
+  if (isLocalhost) {
+    secret = '1x0000000000000000000000000000000AA'
+  }
+
+  if (!secret) {
+    if (process.env.NODE_ENV === 'production') {
+      console.error('Missing CLOUDFLARE_TURNSTILE_PRIVATE_KEY')
+      throw createError({
+        statusCode: 500,
+        message: 'Security validation is currently unavailable',
+      })
+    }
+    console.warn('Missing CLOUDFLARE_TURNSTILE_PRIVATE_KEY, skipping verification')
+    return true
+  }
+
+  // Use URLSearchParams for application/x-www-form-urlencoded (Cloudflare's preference)
+  const params = new URLSearchParams()
+  params.append('secret', secret)
+  params.append('response', token)
+
+  const remoteIp = getRequestHeader(event, 'cf-connecting-ip')
+  if (remoteIp) {
+    params.append('remoteip', Array.isArray(remoteIp) ? remoteIp[0] : remoteIp)
+  }
+
+  try {
+    const turnstileResponse = await $fetch<{ 'success': boolean, 'error-codes'?: string[] }>('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      body: params,
+    })
+
+    if (!turnstileResponse.success) {
+      console.error('Turnstile validation failed:', turnstileResponse['error-codes'], {
+        hasSecret: !!secret,
+        tokenLength: token?.length,
+      })
+      throw createError({
+        statusCode: 400,
+        message: 'Security verification failed. Please try again.',
+      })
+    }
+
+    return true
+  }
+  catch (error: any) {
+    if (error.statusCode === 400) throw error
+
+    console.error('Turnstile verification error:', error)
+    throw createError({
+      statusCode: 500,
+      message: 'Failed to verify security token',
+    })
+  }
+}

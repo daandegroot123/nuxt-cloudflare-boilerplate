@@ -20,6 +20,12 @@ export default defineNuxtConfig({
     preference: 'system',
   },
 
+  runtimeConfig: {
+    public: {
+      cloudflareTurnstileSiteKey: '', // populated at runtime from NUXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY
+    },
+  },
+
   routeRules: {
     '/': { prerender: true },
   },
