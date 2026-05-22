@@ -1,8 +1,22 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 /**
  * Cloudflare Turnstile Wrapper Component
  * Handles script loading and widget lifecycle
  */
+
+interface TurnstileInstance {
+  remove: (id: string) => void
+  render: (container: HTMLElement, options: Record<string, unknown>) => string
+  reset: (id: string) => void
+}
+
+const getTurnstile = () => {
+  if (typeof window !== 'undefined') {
+    return (window as unknown as { turnstile?: TurnstileInstance }).turnstile
+  }
+  return undefined
+}
 
 const props = defineProps<{
   modelValue?: string
@@ -11,7 +25,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string): void
-  (e: 'error', error: any): void
+  (e: 'error', error: unknown): void
   (e: 'expired'): void
 }>()
 
@@ -44,16 +58,17 @@ useHead({
 })
 
 function renderWidget() {
-  if (!container.value || !(window as any).turnstile) return
+  const ts = getTurnstile()
+  if (!container.value || !ts) return
 
   // Clean up existing widget if any
   if (widgetId.value !== null) {
-    (window as any).turnstile.remove(widgetId.value)
+    ts.remove(widgetId.value)
     widgetId.value = null
   }
 
   try {
-    widgetId.value = (window as any).turnstile.render(container.value, {
+    widgetId.value = ts.render(container.value, {
       'sitekey': sitekey.value,
       'callback': (token: string) => {
         emit('update:modelValue', token)
@@ -62,7 +77,7 @@ function renderWidget() {
         emit('update:modelValue', '')
         emit('expired')
       },
-      'error-callback': (err: any) => {
+      'error-callback': (err: unknown) => {
         emit('error', err)
       },
     })
@@ -73,17 +88,17 @@ function renderWidget() {
 }
 
 // Polling for turnstile availability since window is not reactive
-let checkInterval: any = null
+let checkInterval: ReturnType<typeof setInterval> | null = null
 
 onMounted(() => {
-  if (typeof window !== 'undefined' && (window as any).turnstile) {
+  if (getTurnstile()) {
     isLoaded.value = true
   }
   else if (typeof window !== 'undefined') {
     checkInterval = setInterval(() => {
-      if ((window as any).turnstile) {
+      if (getTurnstile()) {
         isLoaded.value = true
-        clearInterval(checkInterval)
+        if (checkInterval) clearInterval(checkInterval)
       }
     }, 100)
   }
@@ -99,16 +114,18 @@ watch([container, isLoaded, sitekey], ([newContainer, loaded, currentSitekey]) =
 
 onUnmounted(() => {
   if (checkInterval) clearInterval(checkInterval)
-  if (widgetId.value !== null && (window as any).turnstile) {
-    (window as any).turnstile.remove(widgetId.value)
+  const ts = getTurnstile()
+  if (widgetId.value !== null && ts) {
+    ts.remove(widgetId.value)
   }
 })
 
 // Define public methods
 defineExpose({
   reset: () => {
-    if (widgetId.value !== null && (window as any).turnstile) {
-      (window as any).turnstile.reset(widgetId.value)
+    const ts = getTurnstile()
+    if (widgetId.value !== null && ts) {
+      ts.reset(widgetId.value)
       emit('update:modelValue', '')
     }
   },

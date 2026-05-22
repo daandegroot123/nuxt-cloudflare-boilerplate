@@ -10,6 +10,7 @@ export default defineEventHandler(async (event) => {
   const ai = useAI(event)
 
   // Run the AI model
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const result: any = await ai.run('@cf/meta/llama-3.1-8b-instruct' as any, {
     prompt,
     max_tokens: 256,

@@ -25,8 +25,8 @@ async function generateAI() {
     })
     aiResponse.value = result
   }
-  catch (e: any) {
-    aiError.value = e.data?.message || 'Failed to generate AI response'
+  catch (e) {
+    aiError.value = (e as { data?: { message?: string } }).data?.message || 'Failed to generate AI response'
   }
   finally {
     aiLoading.value = false
@@ -38,7 +38,11 @@ async function generateAI() {
   <UContainer class="py-8">
     <div class="max-w-3xl mx-auto">
       <div class="mb-8">
-        <UButton to="/app" variant="ghost" icon="i-lucide-arrow-left">
+        <UButton
+          to="/app"
+          variant="ghost"
+          icon="i-lucide-arrow-left"
+        >
           Back to Dashboard
         </UButton>
       </div>
@@ -52,8 +56,13 @@ async function generateAI() {
         <template #header>
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
-              <UIcon name="i-lucide-database" class="w-5 h-5 text-primary" />
-              <h2 class="font-semibold">D1 Database</h2>
+              <UIcon
+                name="i-lucide-database"
+                class="w-5 h-5 text-primary"
+              />
+              <h2 class="font-semibold">
+                D1 Database
+              </h2>
             </div>
             <UButton
               size="xs"
@@ -71,8 +80,14 @@ async function generateAI() {
           This fetches users from your D1 database using Drizzle ORM.
         </p>
 
-        <div v-if="usersStatus === 'pending'" class="flex items-center gap-2 text-gray-500">
-          <UIcon name="i-lucide-loader-2" class="w-4 h-4 animate-spin" />
+        <div
+          v-if="usersStatus === 'pending'"
+          class="flex items-center gap-2 text-gray-500"
+        >
+          <UIcon
+            name="i-lucide-loader-2"
+            class="w-4 h-4 animate-spin"
+          />
           Loading...
         </div>
 
@@ -80,17 +95,27 @@ async function generateAI() {
           <p class="text-sm mb-2">
             Found <strong>{{ usersData.count }}</strong> user(s):
           </p>
-          <div v-if="usersData.users.length > 0" class="space-y-2">
+          <div
+            v-if="usersData.users.length > 0"
+            class="space-y-2"
+          >
             <div
               v-for="user in usersData.users"
               :key="user.id"
               class="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg text-sm"
             >
-              <p class="font-medium">{{ user.name || 'No name' }}</p>
-              <p class="text-gray-500 dark:text-gray-400">{{ user.email }}</p>
+              <p class="font-medium">
+                {{ user.name || 'No name' }}
+              </p>
+              <p class="text-gray-500 dark:text-gray-400">
+                {{ user.email }}
+              </p>
             </div>
           </div>
-          <p v-else class="text-gray-500 dark:text-gray-400 text-sm">
+          <p
+            v-else
+            class="text-gray-500 dark:text-gray-400 text-sm"
+          >
             No users yet. Sign up to create your first user!
           </p>
         </div>
@@ -100,8 +125,13 @@ async function generateAI() {
       <UCard class="mb-6">
         <template #header>
           <div class="flex items-center gap-2">
-            <UIcon name="i-lucide-layers" class="w-5 h-5 text-primary" />
-            <h2 class="font-semibold">Pinia Store</h2>
+            <UIcon
+              name="i-lucide-layers"
+              class="w-5 h-5 text-primary"
+            />
+            <h2 class="font-semibold">
+              Pinia Store
+            </h2>
           </div>
         </template>
 
@@ -111,12 +141,20 @@ async function generateAI() {
 
         <div class="flex items-center gap-4">
           <div class="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg min-w-25">
-            <p class="text-xs text-gray-500 uppercase font-bold">Count</p>
-            <p class="text-2xl font-mono">{{ counter.count }}</p>
+            <p class="text-xs text-gray-500 uppercase font-bold">
+              Count
+            </p>
+            <p class="text-2xl font-mono">
+              {{ counter.count }}
+            </p>
           </div>
           <div class="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg min-w-25">
-            <p class="text-xs text-gray-500 uppercase font-bold">Double</p>
-            <p class="text-2xl font-mono">{{ counter.doubleCount }}</p>
+            <p class="text-xs text-gray-500 uppercase font-bold">
+              Double
+            </p>
+            <p class="text-2xl font-mono">
+              {{ counter.doubleCount }}
+            </p>
           </div>
           <UButton
             icon="i-lucide-plus"
@@ -132,8 +170,13 @@ async function generateAI() {
       <UCard>
         <template #header>
           <div class="flex items-center gap-2">
-            <UIcon name="i-lucide-brain" class="w-5 h-5 text-primary" />
-            <h2 class="font-semibold">Workers AI</h2>
+            <UIcon
+              name="i-lucide-brain"
+              class="w-5 h-5 text-primary"
+            />
+            <h2 class="font-semibold">
+              Workers AI
+            </h2>
           </div>
         </template>
 
@@ -164,11 +207,16 @@ async function generateAI() {
             :title="aiError"
           />
 
-          <div v-if="aiResponse" class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+          <div
+            v-if="aiResponse"
+            class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg"
+          >
             <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">
               Model: {{ aiResponse.model }}
             </p>
-            <p class="whitespace-pre-wrap">{{ aiResponse.response }}</p>
+            <p class="whitespace-pre-wrap">
+              {{ aiResponse.response }}
+            </p>
           </div>
         </div>
       </UCard>

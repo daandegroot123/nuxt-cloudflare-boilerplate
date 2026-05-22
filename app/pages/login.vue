@@ -39,8 +39,8 @@ async function handleSubmit() {
     await refreshNuxtData()
     navigateTo('/app')
   }
-  catch (e: any) {
-    formError.value = e.data?.message || 'An error occurred. Please try again.'
+  catch (e) {
+    formError.value = (e as { data?: { message?: string } }).data?.message || 'An error occurred. Please try again.'
   }
   finally {
     loading.value = false
@@ -76,9 +76,15 @@ function toggleMode() {
           class="mb-4"
         />
 
-        <form class="space-y-4" @submit.prevent="handleSubmit">
+        <form
+          class="space-y-4"
+          @submit.prevent="handleSubmit"
+        >
           <!-- Name field (register only) -->
-          <UFormField v-if="!isLogin" label="Name">
+          <UFormField
+            v-if="!isLogin"
+            label="Name"
+          >
             <UInput
               v-model="form.name"
               placeholder="Your name"
@@ -89,7 +95,10 @@ function toggleMode() {
           </UFormField>
 
           <!-- Email field -->
-          <UFormField label="Email" required>
+          <UFormField
+            label="Email"
+            required
+          >
             <UInput
               v-model="form.email"
               type="email"
@@ -102,7 +111,10 @@ function toggleMode() {
           </UFormField>
 
           <!-- Password field -->
-          <UFormField label="Password" required>
+          <UFormField
+            label="Password"
+            required
+          >
             <UInput
               v-model="form.password"
               type="password"
@@ -113,7 +125,10 @@ function toggleMode() {
               :minlength="8"
               class="w-full"
             />
-            <template v-if="!isLogin" #hint>
+            <template
+              v-if="!isLogin"
+              #hint
+            >
               <span class="text-xs">At least 8 characters</span>
             </template>
           </UFormField>

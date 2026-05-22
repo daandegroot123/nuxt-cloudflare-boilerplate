@@ -44,8 +44,13 @@ const { loggedIn } = useUserSession()
         <UCard>
           <template #header>
             <div class="flex items-center gap-2">
-              <UIcon name="i-lucide-database" class="w-5 h-5 text-primary" />
-              <h3 class="font-semibold">D1 Database</h3>
+              <UIcon
+                name="i-lucide-database"
+                class="w-5 h-5 text-primary"
+              />
+              <h3 class="font-semibold">
+                D1 Database
+              </h3>
             </div>
           </template>
           <p class="text-sm text-gray-500 dark:text-gray-400">
@@ -56,8 +61,13 @@ const { loggedIn } = useUserSession()
         <UCard>
           <template #header>
             <div class="flex items-center gap-2">
-              <UIcon name="i-lucide-brain" class="w-5 h-5 text-primary" />
-              <h3 class="font-semibold">Workers AI</h3>
+              <UIcon
+                name="i-lucide-brain"
+                class="w-5 h-5 text-primary"
+              />
+              <h3 class="font-semibold">
+                Workers AI
+              </h3>
             </div>
           </template>
           <p class="text-sm text-gray-500 dark:text-gray-400">
@@ -68,8 +78,13 @@ const { loggedIn } = useUserSession()
         <UCard>
           <template #header>
             <div class="flex items-center gap-2">
-              <UIcon name="i-lucide-search" class="w-5 h-5 text-primary" />
-              <h3 class="font-semibold">Vectorize</h3>
+              <UIcon
+                name="i-lucide-search"
+                class="w-5 h-5 text-primary"
+              />
+              <h3 class="font-semibold">
+                Vectorize
+              </h3>
             </div>
           </template>
           <p class="text-sm text-gray-500 dark:text-gray-400">

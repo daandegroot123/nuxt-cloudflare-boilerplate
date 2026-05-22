@@ -53,14 +53,23 @@ async function logout() {
         <UCard>
           <template #header>
             <div class="flex items-center gap-2">
-              <UIcon name="i-lucide-database" class="w-5 h-5" />
-              <h3 class="font-semibold">Database Demo</h3>
+              <UIcon
+                name="i-lucide-database"
+                class="w-5 h-5"
+              />
+              <h3 class="font-semibold">
+                Database Demo
+              </h3>
             </div>
           </template>
           <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
             See how to query D1 with Drizzle ORM.
           </p>
-          <UButton to="/app/demo" variant="outline" size="sm">
+          <UButton
+            to="/app/demo"
+            variant="outline"
+            size="sm"
+          >
             View Demo
           </UButton>
         </UCard>
@@ -68,14 +77,23 @@ async function logout() {
         <UCard>
           <template #header>
             <div class="flex items-center gap-2">
-              <UIcon name="i-lucide-brain" class="w-5 h-5" />
-              <h3 class="font-semibold">AI Demo</h3>
+              <UIcon
+                name="i-lucide-brain"
+                class="w-5 h-5"
+              />
+              <h3 class="font-semibold">
+                AI Demo
+              </h3>
             </div>
           </template>
           <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
             Try out Workers AI text generation.
           </p>
-          <UButton to="/app/demo" variant="outline" size="sm">
+          <UButton
+            to="/app/demo"
+            variant="outline"
+            size="sm"
+          >
             View Demo
           </UButton>
         </UCard>

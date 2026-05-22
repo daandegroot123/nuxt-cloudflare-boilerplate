@@ -1,4 +1,4 @@
-import { validateTurnstile } from "~~/server/utils/cloudflare"
+import { validateTurnstile } from '~~/server/utils/cloudflare'
 
 /**
  * Register a new user with email and password

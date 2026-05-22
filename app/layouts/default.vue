@@ -2,8 +2,10 @@
 </script>
 
 <template>
-  <UMain>
-    <slot />
-  </UMain>
-  <UFooter />
+  <div>
+    <UMain>
+      <slot />
+    </UMain>
+    <UFooter />
+  </div>
 </template>

@@ -19,6 +19,7 @@ declare module '#auth-utils' {
 
   interface SecureSessionData {
     // Define secure session data properties here
+    [key: string]: unknown
   }
 }
 

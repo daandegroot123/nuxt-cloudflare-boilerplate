@@ -83,6 +83,7 @@ export function useR2(event: H3Event): R2Bucket {
  */
 export async function generateEmbedding(event: H3Event, text: string): Promise<number[]> {
   const ai = useAI(event)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const result: any = await ai.run('@cf/baai/bge-base-en-v1.5', { text: [text] })
   return result.data[0]
 }
@@ -97,6 +98,7 @@ export async function generateEmbedding(event: H3Event, text: string): Promise<n
  */
 export async function generateEmbeddings(event: H3Event, texts: string[]): Promise<number[][]> {
   const ai = useAI(event)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const result: any = await ai.run('@cf/baai/bge-base-en-v1.5', { text: texts })
   return result.data
 }
@@ -167,8 +169,8 @@ export async function validateTurnstile(event: H3Event, token?: string) {
 
     return true
   }
-  catch (error: any) {
-    if (error.statusCode === 400) throw error
+  catch (error) {
+    if ((error as { statusCode?: number }).statusCode === 400) throw error
 
     console.error('Turnstile verification error:', error)
     throw createError({
