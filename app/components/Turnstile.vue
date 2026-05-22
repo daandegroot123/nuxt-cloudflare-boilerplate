@@ -29,13 +29,16 @@ const container = ref<HTMLElement | null>(null)
 const widgetId = ref<string | null>(null)
 const isLoaded = ref(false)
 
-// Load Turnstile script
+// Load Turnstile script conditionally
 useHead({
   script: [
     {
       src: 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit',
       async: true,
       defer: true,
+      onload: () => {
+        isLoaded.value = true
+      },
     },
   ],
 })
@@ -73,10 +76,10 @@ function renderWidget() {
 let checkInterval: any = null
 
 onMounted(() => {
-  if ((window as any).turnstile) {
+  if (typeof window !== 'undefined' && (window as any).turnstile) {
     isLoaded.value = true
   }
-  else {
+  else if (typeof window !== 'undefined') {
     checkInterval = setInterval(() => {
       if ((window as any).turnstile) {
         isLoaded.value = true
@@ -87,9 +90,10 @@ onMounted(() => {
 })
 
 // Watch for readiness
-watch([container, isLoaded], ([newContainer, loaded]) => {
-  if (newContainer && loaded) {
-    renderWidget()
+watch([container, isLoaded, sitekey], ([newContainer, loaded, currentSitekey]) => {
+  if (newContainer && loaded && currentSitekey) {
+    // Small delay to ensure Turnstile is fully initialized
+    setTimeout(renderWidget, 100)
   }
 }, { immediate: true })
 

@@ -21,6 +21,9 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
+    session: {
+      maxAge: 60 * 60 * 24 * 14, // 2 weeks
+    },
     public: {
       cloudflareTurnstileSiteKey: '', // populated at runtime from NUXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY
     },
